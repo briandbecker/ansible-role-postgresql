@@ -51,17 +51,24 @@
 - name: PostgreSQL | Check whether the postgres data directory is initialized
   stat:
     path: "{{ postgresql_data_directory }}/PG_VERSION"
-  when: ansible_os_family == "RedHat" and not postgresql_cluster_reset
+  when: not postgresql_cluster_reset
   register: pgdata_dir_initialized
 
-- name: PostgreSQL | Initialize the database | RedHat
+- name: PostgreSQL | Stop database if initializing
+  service:
+    name: "{{ postgresql_service_name }}"
+    state: stopped
+  when: (postgresql_cluster_reset or
+         pgdata_dir_exist.changed or
+         not pgdata_dir_initialized.stat.exists)
+
+- name: PostgreSQL | Initialize the database
   command: >
     {{ postgresql_bin_directory }}/initdb -D {{ postgresql_data_directory }}
     --locale={{ postgresql_locale }} --encoding={{ postgresql_encoding }}
   become: yes
   become_user: "{{ postgresql_service_user }}"
-  when: ansible_os_family == "RedHat" and
-        (postgresql_cluster_reset or
+  when: (postgresql_cluster_reset or
          pgdata_dir_exist.changed or
          not pgdata_dir_initialized.stat.exists)
 
