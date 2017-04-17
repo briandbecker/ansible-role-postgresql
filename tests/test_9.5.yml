@@ -3,7 +3,9 @@
 - hosts: all
   remote_user: root
   become: yes
+  vars:
+    postgresql_version: 9.5
   vars_files:
     - ./vars.yml
   roles:
-    - ansible-role-postgresql
+    - role_under_test
