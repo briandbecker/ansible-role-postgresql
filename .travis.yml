@@ -17,9 +17,12 @@ env:
 #    - ROLE_OPTIONS="postgresql_version=9.3" ANSIBLE_VERSION="2.1.2.0"
 #    - ROLE_OPTIONS="postgresql_version=9.4" ANSIBLE_VERSION="2.1.2.0"
 #    - ROLE_OPTIONS="postgresql_version=9.5" ANSIBLE_VERSION="2.1.2.0"
-    - PLAYBOOK="test_9.6.yml" ANSIBLE_VERSION="2.2.0"
-    - PLAYBOOK="test_9.6.yml" ANSIBLE_VERSION="latest"
-    - PLAYBOOK="test_9.5.yml" ANSIBLE_VERSION="latest"
+    - DISTRO="ubuntu1604" PLAYBOOK="test_9.6.yml" ANSIBLE_VERSION="2.2.0"
+    - DISTRO="ubuntu1604" PLAYBOOK="test_9.6.yml" ANSIBLE_VERSION="latest"
+    - DISTRO="ubuntu1604" PLAYBOOK="test_9.5.yml" ANSIBLE_VERSION="latest"
+    - DISTRO="centos7" PLAYBOOK="test_9.6.yml" ANSIBLE_VERSION="2.2.0"
+    - DISTRO="centos7" PLAYBOOK="test_9.6.yml" ANSIBLE_VERSION="latest"
+    - DISTRO="centos7" PLAYBOOK="test_9.5.yml" ANSIBLE_VERSION="latest"
 
 script:
   # Download test shim.
