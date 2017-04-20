@@ -42,7 +42,7 @@ script:
     && (echo 'PostgreSQL running normally' && exit 0)
     || (echo 'PostgreSQL not running' && exit 1)
 
-- >
-  docker exec --tty $container_id env TERM=xterm PGPASSWORD=pass psql --host="127.0.0.1" --username="baz"  -c "SELECT datname FROM pg_database where datistemplate = false;" postgres
-  |grep -q foobar && (echo 'PostgreSQL running normally' && exit 0)
-  || (echo 'PostgreSQL not running' && exit 1)
+  - >
+    docker exec --tty $container_id env TERM=xterm PGPASSWORD=pass psql --host="127.0.0.1" --username="baz"  -c "SELECT datname FROM pg_database where datistemplate = false;" postgres
+    |grep -q foobar && (echo 'PostgreSQL running normally' && exit 0)
+    || (echo 'PostgreSQL not running' && exit 1)
