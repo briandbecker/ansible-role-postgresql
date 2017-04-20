@@ -25,9 +25,24 @@ env:
     - DISTRO="centos7" PLAYBOOK="test_9.5.yml" ANSIBLE_VERSION="latest"
 
 script:
+  - export container_id=$(date +%s)
+  - export cleanup=false
+
   # Download test shim.
   - wget -O ${PWD}/tests/test.sh https://raw.githubusercontent.com/briandbecker/ansible-role-test-shims/master/test.sh
   - chmod +x ${PWD}/tests/test.sh
 
   # Run tests.
   - env ansible_version=$ANSIBLE_VERSION playbook=$PLAYBOOK ${PWD}/tests/test.sh
+
+  # Check to make sure we can connect locally
+  - >
+    docker exec --tty $container_id env TERM=xterm sudo -u postgres psql -c "SELECT datname FROM pg_database where datistemplate = false;"
+    |grep -q foobar
+    && (echo 'PostgreSQL running normally' && exit 0)
+    || (echo 'PostgreSQL not running' && exit 1)
+
+  - >
+    docker exec --tty $container_id env TERM=xterm PGPASSWORD=pass psql --host="127.0.0.1" --username="baz"  -c "SELECT datname FROM pg_database where datistemplate = false;" postgres
+    |grep -q foobar && (echo 'PostgreSQL running normally' && exit 0)
+    || (echo 'PostgreSQL not running' && exit 1)
