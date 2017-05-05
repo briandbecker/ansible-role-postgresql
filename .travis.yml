@@ -33,7 +33,7 @@ script:
   - chmod +x ${PWD}/tests/test.sh
 
   # Run tests.
-  - env ansible_version=$ANSIBLE_VERSION playbook=$PLAYBOOK ${PWD}/tests/test.sh
+  - env distro=$DISTRO ansible_version=$ANSIBLE_VERSION playbook=$PLAYBOOK ${PWD}/tests/test.sh
 
   # Check to make sure we can connect locally
   - >
